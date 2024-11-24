@@ -30,40 +30,46 @@ const rightAnswerMessage = "Yes! You got it!😮‍💨";
 const wrongAnswerMessage1 = "Oh no! That's wrong. Try again. 1 chance left!😰";
 const wrongAnswerMessage2 = "You didn't guess the word! Dragon is near!😱";
 
-const question = {
-  1 : 'I look spiky from outside but I am soft on the inside',
-  2 : 'In the dark, I am your guide',
-  3 : 'I shine like the brightest star, hanging from above',
-  4 : 'I have all the food, but I cannot eat any of them',
-  5 : 'I show you a tiny vast world, that your eyes cannot see',
-  6 : 'You bounce on me, and you reach for the sky',
-  7 : "I am full of stories and pictures, yet I don't tell a tale",
-  8 : "I turn but never walk, I help twist what is tight"
+function getQuestion(key) {
+  switch (key) {
+    case 1 : return 'I look spiky from outside but I am soft on the inside';
+    case 2 : return 'In the dark, I am your guide';
+    case 3 : return 'I shine like the brightest star, hanging from above';
+    case 4 : return 'I have all the food, but I cannot eat any of them';
+    case 5 : return 'I show you a tiny vast world, that your eyes cannot see';
+    case 6 : return 'You bounce on me, and you reach for the sky';
+    case 7 : return "I'm full of stories & pictures, yet I don't tell a tale";
+    case 8 : return "I turn but never walk, I help twist what is tight";
+  }
 } 
 
-const answer = {
-  1 : 'pineapple',
-  2 : 'flashlight',
-  3 : 'chandelier',
-  4 : 'refrigerator',
-  5 : 'microscope',
-  6 : 'trampoline',
-  7 : 'television',
-  8 : 'screwdriver'
+function getWord(key) {
+  switch (key) {
+    case 1 : return 'pineapple';
+    case 2 : return 'flashlight';
+    case 3 : return 'chandelier';
+    case 4 : return 'refrigerator';
+    case 5 : return 'microscope';
+    case 6 : return 'trampoline';
+    case 7 : return 'television';
+    case 8 : return 'screwdriver';
+  }
 }
 
-const point = {
-  1 : 1,
-  2 : 1,
-  3 : 1,
-  4 : 2,
-  5 : 2,
-  6 : 2,
-  7 : 3,
-  8 : 3
+function getPoint(key) {
+  switch (key) {
+    case 1 : return 1;
+    case 2 : return 1;
+    case 3 : return 1;
+    case 4 : return 2;
+    case 5 : return 2;
+    case 6 : return 2;
+    case 7 : return 3;
+    case 8 : return 3;
+  }
 }
 
-const LENGTH = Object.keys(question).length;
+const LENGTH = 8
 
 function isDivisible(dividend, divisor) {
   return dividend % divisor === 0;
@@ -80,17 +86,9 @@ function encrypt(word, number, encryptBy) {
   return encryptedWord;
 }
 
-function createClues(number) {
-  let dictionary = {};
-  for (let i = 1; i <= LENGTH; i++) {
-    dictionary[i + ''] = encrypt(answer[i + ''], number, '_')
-  }
-
-  return dictionary;
+function getClue(word, number) {
+  return encrypt(word, number, '_');
 }
-
-const clue1 = createClues(2);
-const clue2 = createClues(3);
 
 const totalChances = 2;
 
@@ -168,12 +166,12 @@ function isMonkeyHome() {
   return findIndex(playArea, 'M') === 1;
 }
 
-function finalResult() {  
+function finalResult() {
   if (isMonkeyHome()) {
     return "YAAAAY! Chiku got back to his home!!🥳 You saved him!";
   }
-
-  if (!isMonkeySafeInRiver) {
+  
+  if (!isMonkeySafeInRiver()) {
     return "The dragon got Chiku! You didn't save him!!!😭";
   }
   
@@ -206,22 +204,22 @@ function makeMove(char, points) {
   return emojiVersion(playArea);
 }
 
-function askQuest(question, word, clue1, clue2, points) {
+function ask(question, word, points) {
   console.log('Find the word:', '\n\t')
   console.log(lineDecor(question), '\n');
   let chancesLeft = totalChances;
-  let clue = clue1;
+  let clue = getClue(word, 2);
   
   while (chancesLeft > 0) {
     const guess = prompt(clue + ':');
     
-    if(guess.length < word.length) {
-      console.log('Enter something long enough...😃');
+    if(guess === '') {
+      console.log('Enter something...😃');
       continue;
     }
     
     if (guess !== word) {
-      clue = clue2;
+      clue = getClue(word, 3);
       chancesLeft--;
       console.log(wrongAnswerMessage(chancesLeft));
       continue;
@@ -244,7 +242,7 @@ function startGame() {
     
     console.clear();
     console.log(borderDecor(emojiVersion(playArea)) + '\n');
-    askQuest(question[key], answer[key], clue1[key], clue2[key], point[key]);
+    ask(getQuestion(key), getWord(key), getPoint(key));
     
     key++;
   }
@@ -260,8 +258,8 @@ function loadGame() {
   startGame();
   
   console.log(finalPlayArea());
-  console.log(finalResult());
-  console.log("\nThank you for playing!");
+  console.log('\n', finalResult());
+  console.log("\n\nThank you for playing!👋👋👋");
   return;
 }
 
