@@ -24,7 +24,7 @@ Ready to put your puzzle-solving skills to the test? Solve the mystery, and the 
 
 ## **The Invitation Puzzle:**
 
-d⋆⋆lbC⋆K⋆ht⋆ms⋆bD⋆LPH⋆Nkc⋆tsp⋆l : reduce them into one word.
+**d⋆⋆lbC⋆K⋆ht⋆ms⋆bD⋆LPH⋆Nkc⋆tsp⋆l** : reduce them into one word.
 
 ---
 
